@@ -20,7 +20,7 @@ class UserTest {
     }
 
     @Test
-    void createUser() throws IOException {
+    void createUser() {
         testUser.createUser("1", "TestUser", "TestPassword");
     }
 

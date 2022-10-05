@@ -1,9 +1,13 @@
 package app;
 
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 import util.Exceptions;
+import util.Secret;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,48 +19,26 @@ public class User {
 
     public static int money = 0;
 
-    public void createUser(String userID, String userName, String userPassword) throws IOException {
-        // Declare the path of the file who's going to be written.
-        Path filePath = Path.of(userID);
+    public void createUser(String userID, String userName, String userPassword) {
+        // Logging the setting up the client, database and collection.
+        System.out.println("[INFO] : Setting up the MongoDB client...");
+        MongoClient client = new MongoClient(new MongoClientURI(Secret.mongoAddress));
+        System.out.println("[INFO] Client is setup! Setting up the database...");
+        MongoDatabase database = client.getDatabase("data");
+        System.out.println("[INFO] Database is setup! Setting up the collection...");
+        MongoCollection<Document> collection = database.getCollection("userlist");
+        System.out.println("[INFO] All set up!");
 
-        String userIDProcessed = "UserID : " + userID;
-        String userNameProcessed = "userName : " + userName;
-        String userPasswordProcessed = "userPassword : " + userPassword;
-
-        try {
-            // Create a file writer and a BufferedWriter : prepares the writing of the file.
-            FileWriter fstream = new FileWriter("src/data" + filePath);
-            BufferedWriter writer = new BufferedWriter(fstream);
-            // Logs the end of the Preparation.
-            System.out.println("[INFO] userCreate : Writing Preparation Achieved. Writing...");
-
-            // Initializes Writing Process.
-            writer.write(userIDProcessed);
-            writer.newLine();
-            writer.write(userNameProcessed);
-            writer.newLine();
-            writer.write(userPasswordProcessed);
-
-            // If no Exception, Logs the end of the writing and the path of the file.
-            System.out.println("[INFO] userCreate : File Written and located to " + filePath +". (User : " + userID + ")");
-
-            // Logs the closing of the writer.
-            System.out.println("[INFO] userCreate : Closed the BufferedWriter.");
-            writer.close();
-        } catch (Exception e) {
-            System.out.println(Exceptions.writingUserError);
-        }
+        // Sending the Infos.
+        Document user = new Document("userID", userID)
+                .append("userName", userName)
+                .append("userPassword", userPassword);
+        collection.insertOne(user);
+        System.out.println("User added !");
     }
 
     public void deleteUser(String userID) throws IOException {
-        // Defines the file's path.
-        Path filePath = Path.of("src/data" + userID);
-        // Deletes the file based on its path.
-        if (Files.deleteIfExists(filePath)) {
-            System.out.println("[INFO] deleteUser : User Data deleted.");
-        } else {
-            System.out.println(Exceptions.deleteUserError);
-        }
+        // TODO : Setup MongoDB user deletion.
     }
 
     /**
