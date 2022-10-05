@@ -14,8 +14,6 @@ public class Counting {
 
     /**
      * Adds money to a balance.
-     *
-     * @return
      */
     public String addMoney(int amountToAdd, boolean doReturn) {
         // Adds the money.

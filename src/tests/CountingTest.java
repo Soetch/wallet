@@ -13,7 +13,7 @@ class CountingTest {
 
     @Test
     void addMoneyNoReturn() {
-        System.out.println(counting.addMoney(10, true));
+        System.out.println(counting.addMoney(10, false));
     }
     @Test
     void addMoneyReturn() {
@@ -22,7 +22,7 @@ class CountingTest {
 
     @Test
     void takeMoneyNoReturn() {
-        System.out.println(counting.takeMoney(10, true));
+        System.out.println(counting.takeMoney(10, false));
     }
 
     @Test
