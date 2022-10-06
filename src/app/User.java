@@ -1,16 +1,12 @@
 package app;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
+import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import util.Exceptions;
-import util.Secret;
-
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class User {
     public static String userID = null;
@@ -19,10 +15,12 @@ public class User {
 
     public static int money = 0;
 
+    public MongoClientOptions mongoOption = MongoClientOptions.builder().maxConnectionIdleTime(60000).build();
+
     public void createUser(String userID, String userName, String userPassword) {
         // Logging the setting up the client, database and collection.
         System.out.println("[INFO] : Setting up the MongoDB client...");
-        MongoClient client = new MongoClient(new MongoClientURI(Secret.mongoAddress));
+        MongoClient client = new MongoClient(new MongoClientURI("mongodb+srv://soetch:Marceau53@cluster0.abv1rzl.mongodb.net/?retryWrites=true&w=majority"));
         System.out.println("[INFO] Client is setup! Setting up the database...");
         MongoDatabase database = client.getDatabase("data");
         System.out.println("[INFO] Database is setup! Setting up the collection...");

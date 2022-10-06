@@ -10,6 +10,10 @@ class UserTest {
     User testUser = new User();
 
     @Test
+    void returnMoney() {
+        System.out.println(testUser.returnMoney());
+    }
+    @Test
     void addMoney() {
         System.out.println(testUser.addMoney(10, true));
     }
