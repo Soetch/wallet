@@ -73,4 +73,13 @@ public class User {
             return Exceptions.takeMoneyNoReturn;
         }
     }
+
+    public String generateID() {
+        // Setting up a MongoClient
+        MongoClient mongoClient = new MongoClient(new MongoClientURI("mongodb+srv://soetch:Marceau53@cluster0.abv1rzl.mongodb.net/?retryWrites=true&w=majority"));
+        MongoDatabase mongoDatabase = mongoClient.getDatabase("data");
+        MongoCollection<Document> database = mongoDatabase.getCollection("userList");
+
+        return null;
+    }
 }
