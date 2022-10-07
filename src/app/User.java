@@ -1,9 +1,12 @@
 package app;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.connection.SocketSettings;
 import org.bson.Document;
 import util.Exceptions;
 import util.Secret;
@@ -11,6 +14,7 @@ import util.Secret;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.TimeUnit;
 
 public class User {
     public static String userID = null;
@@ -22,7 +26,9 @@ public class User {
     public void createUser(String userID, String userName, String userPassword) {
         // Logging the setting up the client, database and collection.
         System.out.println("[INFO] : Setting up the MongoDB client...");
-        MongoClient client = new MongoClient(new MongoClientURI(Secret.mongoAddress));
+        MongoClient client = MongoClients.create(
+                MongoClientSettings.builder().applyToSocketSettings(SocketSettings.builder().connectTimeout(60, TimeUnit.SECONDS)).build()
+        );
         System.out.println("[INFO] Client is setup! Setting up the database...");
         MongoDatabase database = client.getDatabase("data");
         System.out.println("[INFO] Database is setup! Setting up the collection...");
@@ -35,6 +41,7 @@ public class User {
                 .append("userPassword", userPassword);
         collection.insertOne(user);
         System.out.println("User added !");
+        client.close();
     }
 
     public void deleteUser(String userID) throws IOException {
